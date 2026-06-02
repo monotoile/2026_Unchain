@@ -1111,7 +1111,7 @@ function calcAutoPrice() {
   if (!zone) { priceEl.value = ''; return; }
 
   const is2F = zone === '2층';
-  const base = is2F ? 55000 : 70000;
+  const base = is2F ? 44000 : 66000; // 1층 R석 66,000 / 2층 S석 44,000
 
   let price = base;
   if      (dtype === 'preview50')  price = Math.round(base * 0.5);
@@ -1120,7 +1120,7 @@ function calcAutoPrice() {
   else if (dtype === 'revisit30')  price = Math.round(base * 0.7);
   else if (dtype === 'kontentz15') price = Math.round(base * 0.85);
 
-  price += 2000; // 예매 수수료
+  price += 1000; // 예매 수수료
   if (c1000)  price -= 10000;
   if (cNaver) price -= 2500;
 
