@@ -120,7 +120,7 @@
     </div>
   </div>
 
-  <!-- 다관람 카드 -->
+  <!-- 재관람 카드 -->
   <div class="section-title" style="margin-bottom:8px;">재관람 카드</div>
   <div id="stamp-boards-list" style="margin-bottom:16px;"></div>
 </div>
@@ -346,9 +346,9 @@
       <input type="text" class="form-control" id="rec-comment" placeholder="예매자명 0000">
     </div>
 
-    <!-- 다관람 카드 -->
+    <!-- 재관람 카드 -->
     <div class="form-group" id="rec-stamp-group">
-      <label class="form-label">다관람 카드</label>
+      <label class="form-label">재관람 카드</label>
       <select class="form-control" id="rec-stamp-board" onchange="onRecStampBoardChange()">
         <option value="">연동 안 함</option>
       </select>
@@ -932,71 +932,32 @@ function saveRecord() {
       || (prevStampBoardId && date !== prevRecord.date);
 
     if (stampChanged) {
+      // ① 전체 보드에서 이 recordId 이력 제거 (overflow 보드 포함)
       const boards = getStampBoards();
-
-      // ① 이전 도장판에서 이 기록의 이력 제거 (recordId로 정확하게 매칭)
-      if (prevStampBoardId) {
-        const prevBoard = boards.find(b => b.id === prevStampBoardId);
-        if (prevBoard && prevBoard.history) {
-          // recordId 매칭 우선, 없으면 date+method로 폴백
-          const idx = prevBoard.history.map((h,i)=>({h,i})).reverse()
-            .find(({h}) => h.recordId === editId || (h.date === prevRecord.date && h.method?.includes('관람 연동')));
-          if (idx !== undefined) prevBoard.history.splice(idx.i, 1);
-          recalcStampCount(prevBoard);
-          revalidateMilestones(prevBoard);
+      boards.forEach(board => {
+        if (!board.history) return;
+        const before = board.history.length;
+        board.history = board.history.filter(h => h.recordId !== editId);
+        // 구형 데이터(recordId 없음) 폴백: prevStampBoardId 보드에서 date 매칭
+        if (board.id === prevStampBoardId && board.history.length === before) {
+          const idx = board.history.map((h,i)=>({h,i})).reverse()
+            .find(({h}) => h.date === prevRecord.date && h.method?.includes('관람 연동'));
+          if (idx !== undefined) board.history.splice(idx.i, 1);
         }
-      }
-
-      // ② 새 도장판에 추가 — applyStampToBoard 활용 (마일스톤·할인권 처리 포함)
-      if (stampBoardId) {
-        const newBoard = boards.find(b => b.id === stampBoardId);
-        if (newBoard) {
-          // 같은 도장판이면 마일스톤 notified 리셋 후 재계산
-          if (prevStampBoardId === stampBoardId) revalidateMilestones(newBoard);
-          recalcStampCount(newBoard);
-
-          const remaining = newBoard.totalSlots - newBoard.currentCount;
-          // 꽉 찬 보드면 덮어쓰기 방지 (totalSlots 초과 불가)
-          const actualQty = remaining > 0 ? Math.min(stampQty, remaining) : 0;
-          if (actualQty > 0) {
-            const qtyLabel  = actualQty > 1 ? ' ×' + actualQty : '';
-            if (!newBoard.history) newBoard.history = [];
-            newBoard.history.push({
-              recordId: editId,
-              date,
-              method: `${mark} · ${singer} 관람 연동` + qtyLabel,
-              comment: '',
-              qty: actualQty
-            });
-            recalcStampCount(newBoard);
-
-            // 마일스톤 달성 시 notified 설정 (쿠폰 count는 calcCouponCount()가 m.notified로 동적 계산)
-            if (!newBoard.milestones) newBoard.milestones = [
-              { at:3, reward:'40% 할인권 ×2',   couponKey:'discount40', qty:2, notified:false },
-              { at:5, reward:'폴라로이드 ×1 📸', couponKey:null,         qty:1, notified:false }
-            ];
-            newBoard.milestones.forEach(m => {
-              if (newBoard.currentCount >= m.at && !m.notified) {
-                m.notified = true;
-              }
-            });
-          }
-        }
-      }
+        if (board.history.length !== before) { recalcStampCount(board); revalidateMilestones(board); }
+      });
       saveStampBoards(boards);
+
+      // ② 새 도장판에 추가 (overflow 자동 이월 포함)
+      if (stampBoardId) {
+        applyStampToBoard(stampBoardId, stampQty, date, `${mark} · ${singer} 관람 연동`, '', editId);
+      }
     }
     showToast('기록이 수정되었습니다');
   } else {
     records.push(record);
     if (stampBoardId) {
-      const toastMsg = applyStampToBoard(stampBoardId, stampQty, date, `${mark} · ${singer} 관람 연동`);
-      // 방금 추가된 history에 recordId 심기 (수정 시 정확한 삭제를 위해)
-      const boards2 = getStampBoards();
-      const board2  = boards2.find(b => b.id === stampBoardId);
-      if (board2 && board2.history && board2.history.length) {
-        board2.history[board2.history.length - 1].recordId = record.id;
-        saveStampBoards(boards2);
-      }
+      const toastMsg = applyStampToBoard(stampBoardId, stampQty, date, `${mark} · ${singer} 관람 연동`, '', record.id);
       showToast(toastMsg || '기록이 추가되었습니다');
     } else {
       showToast('기록이 추가되었습니다');
@@ -1050,7 +1011,7 @@ function openDetail(id) {
       if (seq === null) seq = board.currentCount;
       const qty = r.stampQty || 1;
       const seqLabel = qty > 1 ? `[${seq}~${seq+qty-1}번째 도장] ×${qty}` : `${seq}번째 도장`;
-      html += `<div class="detail-field"><div class="detail-field-label">다관람 카드</div><div class="detail-field-value">[🎫 ${board.name}] ${seqLabel}</div></div>`;
+      html += `<div class="detail-field"><div class="detail-field-label">재관람 카드</div><div class="detail-field-value">[🎫 ${board.name}] ${seqLabel}</div></div>`;
     }
   }
   if (r.memo) html += `<div class="detail-field"><div class="detail-field-label">감상 메모</div><div class="detail-field-value" style="font-size:14px;line-height:1.6;white-space:pre-wrap;">${r.memo}</div></div>`;
@@ -1913,7 +1874,7 @@ function renderStampBoards() {
   if (allDone) {
     html += `<div style="text-align:center;padding:12px 0 8px;">
       <button class="btn btn-primary" onclick="openAddStampBoard()" style="width:100%;padding:14px;">
-        🆕 새 다관람 카드 시작하기
+        🆕 새 재관람 카드 시작하기
       </button>
       <p style="font-size:12px;color:var(--text3);margin-top:8px;">3회: 40% 할인권 ×2 / 5회: 폴라로이드 ×1 📸</p>
     </div>`;
@@ -2298,7 +2259,30 @@ function revalidateMilestones(board) {
   });
 }
 
-function applyStampToBoard(boardId, qty, date, historyComment, comment) {
+// 새 재관람 카드 자동 생성 — boards 배열에 push 후 새 id 반환
+function createNewStampBoard(boards) {
+  const maxNum = boards.reduce((max, b) => {
+    const n = parseInt(b.name);
+    return (!isNaN(n) && n > max) ? n : max;
+  }, 0);
+  const newBoard = {
+    id: uuid(),
+    name: String(maxNum + 1),
+    totalSlots: 5,
+    reward: '40% 할인권 ×2 + 폴라로이드 ×1',
+    milestones: [
+      { at: 3, reward: '40% 할인권 ×2',   couponKey: 'discount40', qty: 2, notified: false },
+      { at: 5, reward: '폴라로이드 ×1 📸', couponKey: null,         qty: 1, notified: false }
+    ],
+    currentCount: 0,
+    history: []
+  };
+  boards.push(newBoard);
+  return newBoard.id;
+}
+
+// recordId: 관람 기록 연동 시 전달 (수동 도장은 생략)
+function applyStampToBoard(boardId, qty, date, historyComment, comment, recordId) {
   const boards = getStampBoards();
   const board  = boards.find(b => b.id === boardId);
   if (!board) return null;
@@ -2308,10 +2292,13 @@ function applyStampToBoard(boardId, qty, date, historyComment, comment) {
 
   const remaining = board.totalSlots - board.currentCount;
   const actualQty = Math.min(qty, remaining);
+  const overflow  = qty - actualQty;
 
   if (!board.history) board.history = [];
   const qtyLabel = actualQty > 1 ? ' ×' + actualQty : '';
-  board.history.push({ date, method: historyComment + qtyLabel, comment: comment || '', qty: actualQty });
+  const entry = { date, method: historyComment + qtyLabel, comment: comment || '', qty: actualQty };
+  if (recordId) entry.recordId = recordId;
+  board.history.push(entry);
   recalcStampCount(board);
 
   if (!board.milestones) board.milestones = [
@@ -2325,10 +2312,23 @@ function applyStampToBoard(boardId, qty, date, historyComment, comment) {
       toastMsg = (m.couponKey ? '🏷 ' : '') + m.reward + ' 달성!';
     }
   });
-
   if (board.currentCount >= board.totalSlots) {
-    toastMsg = '★ 다관람 카드 완성! ' + (board.reward||'');
-    if (actualQty < qty) toastMsg += ' (' + (qty - actualQty) + '개 초과분 제외)';
+    toastMsg = '★ [' + board.name + '] 재관람 카드 완성!';
+  }
+
+  // overflow: 자동으로 새 카드 생성 후 잔여 도장 이월
+  if (overflow > 0) {
+    const newId = createNewStampBoard(boards);
+    const nb    = boards.find(b => b.id === newId);
+    const oLabel = overflow > 1 ? ' ×' + overflow : '';
+    const oEntry = { date, method: historyComment + oLabel + ' (이월)', comment: comment || '', qty: overflow };
+    if (recordId) oEntry.recordId = recordId;
+    nb.history.push(oEntry);
+    recalcStampCount(nb);
+    nb.milestones.forEach(m => {
+      if (nb.currentCount >= m.at && !m.notified) { m.notified = true; }
+    });
+    toastMsg = `★ [${board.name}] 완성 + [${nb.name}] 새 카드 시작 (${overflow}개 이월)`;
   }
 
   saveStampBoards(boards);
