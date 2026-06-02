@@ -76,15 +76,9 @@
     <div class="cal-filter-row" style="margin-top:4px;border-top:1px solid var(--border);padding-top:6px;">
       <span class="cal-filter-label">공연 보기</span>
       <div style="display:flex;gap:6px;">
-        <button class="cal-chip active" id="cal-view-btn-all" onclick="setCalViewMode('all',this)">전체 공연</button>
-        <button class="cal-chip" id="cal-view-btn-mine" onclick="setCalViewMode('mine',this)">내 관람</button>
-      </div>
-    </div>
-    <div class="cal-filter-row">
-      <span class="cal-filter-label">이벤트</span>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;">
-        <button class="cal-chip active" data-ef="all" onclick="setCalEventFilter('all',this)">전체</button>
-        <button class="cal-chip" data-ef="confirmed" onclick="setCalEventFilter('confirmed',this)">공지</button>
+        <button class="cal-chip active" id="cal-view-btn-all" onclick="setCalViewMode('all',this)">전체</button>
+        <button class="cal-chip" id="cal-view-btn-mine" onclick="setCalViewMode('mine',this)">관람</button>
+        <button class="cal-chip active" id="cal-view-btn-events" onclick="toggleCalEvents(this)">이벤트</button>
       </div>
     </div>
   </div>
@@ -1417,9 +1411,9 @@ function renderHome() {
 let calYear, calMonth;
 let calFilterMark   = null;
 let calFilterSinger = null;
-let calViewMode      = 'all';   // 'all' | 'mine'
-let calEventFilter   = 'all';   // 'all' | 'confirmed' | 'predicted'
-let calSelectedDs = null;
+let calViewMode     = 'all';   // 'all' | 'mine'
+let calShowEvents   = true;    // 이벤트 표시 여부 (기본: 표시)
+let calSelectedDs   = null;
 
 function initCal() {
   const n = new Date();
@@ -1454,8 +1448,7 @@ function updateCalFilterHint() {
 }
 
 function getFilteredEvents() {
-  if (calEventFilter === 'all') return getEvents();
-  return getEvents().filter(e => e.eventType === calEventFilter);
+  return calShowEvents ? getEvents() : [];
 }
 
 function getEventsForDate(ds, events) {
@@ -1469,10 +1462,9 @@ function setCalViewMode(mode, btn) {
   renderCalendar();
 }
 
-function setCalEventFilter(filter, btn) {
-  calEventFilter = filter;
-  document.querySelectorAll('[data-ef]').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+function toggleCalEvents(btn) {
+  calShowEvents = !calShowEvents;
+  btn.classList.toggle('active', calShowEvents);
   renderCalendar();
 }
 
@@ -1485,6 +1477,8 @@ function applyCalFilterUI() {
   }
   syncRow('cal-chips-mark',   calFilterMark);
   syncRow('cal-chips-singer', calFilterSinger);
+  const evBtn = document.getElementById('cal-view-btn-events');
+  if (evBtn) evBtn.classList.toggle('active', calShowEvents);
   updateCalFilterHint();
 }
 
