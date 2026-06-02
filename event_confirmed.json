@@ -1,1 +1,11 @@
-[]
+[
+  { "name": "첫공 무대인사",             "startDate": "2026-06-16", "endDate": "2026-06-19", "color": "#87C4E8" },
+  { "name": "프리뷰 위크",               "startDate": "2026-06-16", "endDate": "2026-06-21", "color": "#B0A0D0" },
+  { "name": "트리플 적립 + 커튼콜 위크", "startDate": "2026-06-23", "endDate": "2026-06-28", "color": "#8870C0" },
+  { "name": "1차 장면 시연 위크",        "startDate": "2026-06-30", "endDate": "2026-07-05", "color": "#E898B0" },
+  { "name": "더블 적립 위크",            "startDate": "2026-07-07", "endDate": "2026-07-12", "color": "#E89040" },
+  { "name": "셀카 포토카드 증정 위크",   "startDate": "2026-07-14", "endDate": "2026-07-19", "color": "#C8A030" },
+  { "name": "석진싱어 막공 무대인사",    "startDate": "2026-07-19", "endDate": "2026-07-19", "color": "#87C4E8" },
+  { "name": "커튼콜 위크",               "startDate": "2026-07-21", "endDate": "2026-07-26", "color": "#50A060" },
+  { "name": "전관 DAY",                  "startDate": "2026-07-22", "endDate": "2026-07-22", "color": "#5A8CC8" }
+]
