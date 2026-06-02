@@ -1109,17 +1109,17 @@ function openDetail(id) {
 // null 요소는 들여쓰기용 빈 칸, 'console'은 콘솔 블록
 const SEAT_BLOCKS = {
   '1층': {
-    'A': ['indent1',[1,3],[4,14],[15,18]],
+    'A': ['indent1',[1,3],[4,14],'pad1',[15,18]],
     'B': [[1,4],[5,16],[17,20]],
-    'C': [[1,4],[5,15],[16,19]],
+    'C': [[1,4],[5,15],'pad1',[16,19]],
     'D': [[1,4],[5,16],[17,20]],
-    'E': [[1,4],[5,15],[16,19]],
+    'E': [[1,4],[5,15],'pad1',[16,19]],
     'F': [[1,4],[5,16],[17,20]],
     'G': [[1,4],[5,16],[17,20]],
     'H': [[1,4],[5,16],[17,20]],
     'I': [[1,4],[5,16],[17,20]],
     'J': ['indent2',[1,6],[7,15],[16,19]],
-    'K': ['indent1',[1,7],'console',[8,10],[11,14]]
+    'K': ['indent1',[1,7],'console',[8,10],'pad1',[11,14]]
   },
   '2층': {
     'M': [[1,17]],
@@ -1224,6 +1224,8 @@ function buildMiniSeat(zone, row, num) {
     if (b === 'indent1' || b === 'indent2') {
       const w = b === 'indent2' ? 24 : 12;
       html += `<div style="width:${w}px;flex-shrink:0;"></div>`;
+    } else if (b === 'pad1') {
+      html += `<div style="width:12px;flex-shrink:0;"></div>`;
     } else if (b === 'console') {
       html += `<div style="width:46px;height:10px;background:var(--bg3);border:1px solid var(--border);border-radius:2px;flex-shrink:0;font-size:6px;color:var(--text3);display:flex;align-items:center;justify-content:center;">콘솔</div>`;
     } else {
@@ -1856,6 +1858,7 @@ function renderHeatmap() {
         if (b === 'indent1') { z += `<div style="width:${C}px;flex-shrink:0;"></div>`; }
         else if (b === 'indent2') { z += `<div style="width:${C*2+2}px;flex-shrink:0;"></div>`; }
         else if (b === 'console') { z += `<div style="width:${CONSOLE_W}px;height:${C}px;background:var(--bg3);border-radius:2px;flex-shrink:0;font-size:7px;color:var(--text3);display:flex;align-items:center;justify-content:center;">콘솔</div>`; }
+        else if (b === 'pad1') { z += `<div style="width:${C}px;flex-shrink:0;"></div>`; }
         else {
           for (let n=b[0]; n<=b[1]; n++) {
             const k=`${zoneName}|${row}|${n}`, cnt=seatMap[k]||0, c=cls(cnt);
