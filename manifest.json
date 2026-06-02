@@ -1,12 +1,12 @@
 {
-  "name": "시데레우스 2026",
-  "short_name": "시데레우스",
-  "description": "뮤지컬 시데레우스 2026 관람 기록 앱",
-  "start_url": "/2026_Sidereus/",
-  "scope": "/2026_Sidereus/",
+  "name": "언체인 2026",
+  "short_name": "언체인",
+  "description": "뮤지컬 언체인 2026 관람 기록 앱",
+  "start_url": "/2026_Unchain/",
+  "scope": "/2026_Unchain/",
   "display": "standalone",
   "background_color": "#f8f8f6",
-  "theme_color": "#2B7CC4",
+  "theme_color": "#3E6DBF",
   "orientation": "portrait",
   "icons": [
     {

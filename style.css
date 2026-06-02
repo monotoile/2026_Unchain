@@ -1,20 +1,20 @@
   :root {
     --bg: #f8f8f6; --bg1: #ffffff; --bg2: #ffffff; --bg3: #f0f0ee;
     --border: #e0e0dc; --text: #1a1a1a; --text1: #1a1a1a; --text2: #555550; --text3: #999990;
-    --accent: #2B7CC4; --accent2: #1A5A9E; --accent-light: #C8E0F5;
+    --accent: #3E6DBF; --accent2: #2E5295; --accent-light: #CDD8F2;
     --danger: #cc4444; --success: #2a8a4a; --star: #f0a020;
-    --seat1: #B8D4F0; --seat2: #90B8E8; --seat3: #5A90D8; --seat4: #2B6AB8; --seat5: #1A4A9E;
+    --seat1: #BCC8EC; --seat2: #8AAADA; --seat3: #5078C8; --seat4: #2B52A0; --seat5: #1A3A80;
     --shadow: 0 2px 12px rgba(0,0,0,0.08); --radius: 12px; --tab-h: 64px;
   }
   [data-theme="dark"] {
     --bg: #111118; --bg1: #1a1a24; --bg2: #1a1a24; --bg3: #22222e;
     --border: #333340; --text: #f0f0f0; --text1: #f0f0f0; --text2: #aaaaaa; --text3: #666670;
-    --accent: #4A9AD8; --accent2: #6AB8FF; --accent-light: #1A2E50;
+    --accent: #5A82D0; --accent2: #7AA2E8; --accent-light: #1A2844;
     --danger: #ee6666; --success: #44aa66;
     --shadow: 0 2px 12px rgba(0,0,0,0.4);
-    --seat1: #1a3570; --seat2: #1e52a0; --seat3: #2e70cc; --seat4: #4490e0; --seat5: #6ab0ff;
+    --seat1: #1a3070; --seat2: #1e4a9a; --seat3: #2a68c8; --seat4: #3a88e0; --seat5: #5aaaf8;
   }
-  [data-theme="dark"] .next-show-card { background: linear-gradient(135deg, #1a3a70 0%, #26508a 100%); color: #fff; }
+  [data-theme="dark"] .next-show-card { background: linear-gradient(135deg, #1a2e60 0%, #2a4a8a 100%); color: #fff; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: 'Apple SD Gothic Neo', sans-serif;
@@ -160,12 +160,10 @@
   .cal-session-row { display: flex; align-items: center; gap: 8px; padding: 9px 14px; border-top: 1px solid var(--border); }
   .cal-session-time { font-size: 12px; font-weight: 700; color: var(--text2); min-width: 36px; text-align: center; }
   .cal-session-casting { flex: 1; font-size: 13px; }
-  .cal-session-casting .galileo { color: #B88A20; font-weight: 600; }
-  .cal-session-casting .kepler  { color: #1A5A9E; font-weight: 600; }
-  .cal-session-casting .maria   { color: #A05890; font-weight: 600; }
-  [data-theme="dark"] .cal-session-casting .galileo { color: #D4A843; }
-  [data-theme="dark"] .cal-session-casting .kepler  { color: #4A9AD8; }
-  [data-theme="dark"] .cal-session-casting .maria   { color: #C47AB0; }
+  .cal-session-casting .mark   { color: #1B3A6B; font-weight: 600; }
+  .cal-session-casting .singer { color: #3C3C3C; font-weight: 600; }
+  [data-theme="dark"] .cal-session-casting .mark   { color: #7090C8; }
+  [data-theme="dark"] .cal-session-casting .singer { color: #AAAAAA; }
   .cal-session-badge { font-size: 10px; padding: 2px 7px; border-radius: 8px; font-weight: 600; white-space: nowrap; }
   .cal-session-badge.done   { background: var(--accent-light); color: var(--accent); }
   .cal-session-badge.booked { background: #e6f9ee; color: var(--success); }
@@ -217,12 +215,10 @@
   .schedule-row.today-row { background: var(--accent-light); }
   .time-badge { font-size: 11px; background: var(--bg3); padding: 2px 6px; border-radius: 4px; color: var(--text2); }
   .actor-pill { display: inline-block; font-size: 12px; padding: 2px 8px; border-radius: 12px; font-weight: 500; }
-  .actor-pill.galileo { background: #FBF0D8; color: #B88A20; }
-  .actor-pill.kepler  { background: #D4E8F7; color: #1A5A9E; }
-  .actor-pill.maria   { background: #F5E0F0; color: #A05890; }
-  [data-theme="dark"] .actor-pill.galileo { background: #2A1E08; color: #D4A843; }
-  [data-theme="dark"] .actor-pill.kepler  { background: #0A1E38; color: #4A9AD8; }
-  [data-theme="dark"] .actor-pill.maria   { background: #28102A; color: #C47AB0; }
+  .actor-pill.mark   { background: #D0D8F0; color: #1B3A6B; }
+  .actor-pill.singer { background: #E0E0E0; color: #3C3C3C; }
+  [data-theme="dark"] .actor-pill.mark   { background: #0A1830; color: #7090C8; }
+  [data-theme="dark"] .actor-pill.singer { background: #2A2A2A; color: #AAAAAA; }
 
   /* STAMP / COUPON */
   .stamp-cards-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
@@ -298,24 +294,21 @@
   .detail-field-value { font-size: 15px; font-weight: 500; }
   .casting-display { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0; }
   .casting-tag { padding: 6px 14px; border-radius: 20px; font-size: 14px; font-weight: 600; }
-  .casting-tag.galileo { background: #FBF0D8; color: #B88A20; }
-  .casting-tag.kepler  { background: #D4E8F7; color: #1A5A9E; }
-  .casting-tag.maria   { background: #F5E0F0; color: #A05890; }
-  [data-theme="dark"] .casting-tag.galileo { background: #2A1E08; color: #D4A843; }
-  [data-theme="dark"] .casting-tag.kepler  { background: #0A1E38; color: #4A9AD8; }
-  [data-theme="dark"] .casting-tag.maria   { background: #28102A; color: #C47AB0; }
+  .casting-tag.mark   { background: #D0D8F0; color: #1B3A6B; }
+  .casting-tag.singer { background: #E0E0E0; color: #3C3C3C; }
+  [data-theme="dark"] .casting-tag.mark   { background: #0A1830; color: #7090C8; }
+  [data-theme="dark"] .casting-tag.singer { background: #2A2A2A; color: #AAAAAA; }
 
   /* HOME */
   .next-show-card { background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%); border-radius: var(--radius); padding: 18px; margin-bottom: 8px; color: #fff; position: relative; overflow: hidden; cursor: pointer; }
-  .next-show-card::before { content: '🔭'; position: absolute; right: 16px; top: 12px; font-size: 40px; opacity: 0.15; }
+  .next-show-card::before { content: '⛓'; position: absolute; right: 16px; top: 12px; font-size: 40px; opacity: 0.15; }
   .next-show-dday { font-size: 32px; font-weight: 900; letter-spacing: -1px; margin-bottom: 4px; }
   .next-show-dday.today-dday { color: #ffe066; }
   .next-show-date { font-size: 13px; opacity: 0.85; margin-bottom: 10px; }
   .next-show-casting { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
   .next-show-pill { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-  .next-show-pill.galileo { background: rgba(255,240,200,0.3); }
-  .next-show-pill.kepler  { background: rgba(255,255,255,0.25); }
-  .next-show-pill.maria   { background: rgba(255,200,240,0.3); }
+  .next-show-pill.mark   { background: rgba(200,220,255,0.3); }
+  .next-show-pill.singer { background: rgba(255,255,255,0.2); }
   .next-show-seat { font-size: 12px; opacity: 0.75; }
 
   .upcoming-item { display: flex; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--border); cursor: pointer; gap: 10px; }

@@ -1,5 +1,5 @@
-const CACHE_NAME = 'sidereus2026-v2';
-const BASE = '/2026_Sidereus';
+const CACHE_NAME = 'unchain2026-v1';
+const BASE = '/2026_Unchain';
 
 // 앱 시작 시 캐시할 파일들
 const PRECACHE_URLS = [
