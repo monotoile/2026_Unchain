@@ -7,5 +7,9 @@
   { "name": "셀카 포토카드 증정 위크",   "startDate": "2026-07-14", "endDate": "2026-07-19", "color": "#C8A030" },
   { "name": "석진싱어 막공 무대인사",    "startDate": "2026-07-19", "endDate": "2026-07-19", "color": "#87C4E8" },
   { "name": "커튼콜 위크",               "startDate": "2026-07-21", "endDate": "2026-07-26", "color": "#50A060" },
-  { "name": "전관 DAY",                  "startDate": "2026-07-22", "endDate": "2026-07-22", "color": "#5A8CC8" }
+  { "name": "전관 DAY",                  "startDate": "2026-07-22", "endDate": "2026-07-22", "color": "#5A8CC8" },
+  { "name": "2차 장면 시연 위크",        "startDate": "2026-07-28", "endDate": "2026-08-02", "color": "#87C4E8" },
+  { "name": "페어 셀카 포토카드 증정 위크", "startDate": "2026-08-04", "endDate": "2026-08-09", "color": "#B0A0D0" },
+  { "name": "미공개 공연사진 엽서 증정 위크 (싱어&마크 편지+멜로디 카드)", "startDate": "2026-08-11", "endDate": "2026-08-17", "color": "#8870C0" },
+  { "name": "더블 적립 위크",            "startDate": "2026-08-13", "endDate": "2026-08-17", "color": "#E898B0" }
 ]
