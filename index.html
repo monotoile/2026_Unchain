@@ -1708,7 +1708,7 @@ function renderStats() {
   pairs.forEach(([mk,sg]) => {
     const tot  = schedule.filter(x=>x.mark===mk&&x.singer===sg).length;
     const seen = records.filter(r=>r.mark===mk&&r.singer===sg).length;
-    if (tot>0||seen>0) ph += `<tr><td>${mk}</td><td>${sg}</td><td style="color:var(--text3)">${tot}</td><td>${seen}</td></tr>`;
+    if (seen>0) ph += `<tr><td>${mk}</td><td>${sg}</td><td style="color:var(--text3)">${tot}</td><td>${seen}</td></tr>`;
   });
   if (!ph.includes('<td>')) ph += '<tr><td colspan="4" style="text-align:center;color:var(--text3);padding:12px;">기록 없음</td></tr>';
   document.getElementById('stats-pairs').innerHTML = ph;
