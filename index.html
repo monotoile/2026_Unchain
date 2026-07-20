@@ -893,7 +893,9 @@ function saveRecord() {
   const prevCouponKey = DISCOUNT_COUPON_MAP[prevDiscount] || null;
   const couponChanged = discountType !== prevDiscount;
 
-  if (newCouponKey && couponChanged) {
+  const paidDiffChecked = document.getElementById('rec-paid-diff')?.checked || false;
+
+  if (newCouponKey && couponChanged && !paidDiffChecked) {
     const boards = getStampBoards();
     const coupons = getCoupons();
     const available = calcCouponCount(newCouponKey, coupons, boards, records);
